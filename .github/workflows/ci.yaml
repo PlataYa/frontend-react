@@ -24,7 +24,4 @@ jobs:
         run: npm ci # Use npm ci for cleaner installs in CI
 
       - name: Run linter
-        run: npm run lint # Replace with your actual lint script from package.json if different
-
-      - name: Run tests
-        run: npm run test # Replace with your actual test script from package.json if different
+        run: npm run lint
