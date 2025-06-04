@@ -1,9 +1,8 @@
 name: React Native CI
 
 on:
-  push:
-    branches: [ main, dev ]
   pull_request:
+    types: [ opened, reopened, synchronize ]
     branches: [ main, dev ]
 
 jobs:
