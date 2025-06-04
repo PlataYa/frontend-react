@@ -1,0 +1,31 @@
+name: React Native CI
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  test_and_lint:
+    name: Test and Lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18' # Specify your Node.js version, consistent with your other workflows
+          cache: 'npm' # Enable caching for npm dependencies
+
+      - name: Install dependencies
+        run: npm ci # Use npm ci for cleaner installs in CI
+
+      - name: Run linter
+        run: npm run lint # Replace with your actual lint script from package.json if different
+
+      - name: Run tests
+        run: npm run test # Replace with your actual test script from package.json if different
