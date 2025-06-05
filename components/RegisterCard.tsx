@@ -10,7 +10,6 @@ const RegisterCard: React.FC = () => {
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [lastname, setLastname] = useState('');
-    const [dayOfBirth, setdayOfBirth] = useState('');
     const navigation = useNavigation<any>();
 
     const handleRegister = async () => {
