@@ -9,4 +9,5 @@ export type RootStackParamList = {
     Login: undefined;
     Register: undefined;
     Home: { user: User };
+    Transfer: { user: User };
 };
