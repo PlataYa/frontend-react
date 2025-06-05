@@ -6,7 +6,7 @@ import {
     LoginResponseDTO,
     UserResponseDTO
 } from '../dto/user.dto';
-import { WalletResponseDTO } from '../dto/wallet.dto';
+import { WalletResponseDTO, AllWalletsResponseDTO } from '../dto/wallet.dto';
 import {
     P2PTransferDTO,
     DepositDTO,
@@ -37,6 +37,11 @@ export const getAllUsers = async (): Promise<UserResponseDTO[]> => {
 // Wallets
 export const getWalletByCVU = async (cvu: number): Promise<WalletResponseDTO> => {
     const response = await api.get(`/wallet/${cvu}`);
+    return response.data;
+};
+
+export const getAllWallets = async (): Promise<AllWalletsResponseDTO> => {
+    const response = await api.get('/wallet/all');
     return response.data;
 };
 
