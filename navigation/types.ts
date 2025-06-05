@@ -8,6 +8,6 @@ export type User = {
 export type RootStackParamList = {
     Login: undefined;
     Register: undefined;
-    Home: { user: User };
-    Transfer: { user: User };
+    Home: undefined;
+    Transfer: undefined;
 };

@@ -1,31 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/types';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import ActionsContainer from "../components/ActionsContainer";
 import {useNavigation} from "@react-navigation/native";
 import { getWalletByMail } from '../api/api';
 import WalletInfo from '../components/WalletInfo';
 import {WalletResponseDTO} from "../dto/wallet.dto";
+import {useAuth} from "../auth/AuthProvider";
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
-
-const HomeScreen: React.FC<Props> = ({ route }) => {
-    const { user } = route.params;
+const HomeScreen: React.FC = () => {
+    const { user, removeUser } = useAuth();
     const [wallet, setWallet] = useState<WalletResponseDTO | null>(null);
+    const navigation = useNavigation<any>();
 
     useEffect(() => {
-        const fetchWallet = async () => {
-            try {
-                const wallet = await getWalletByMail(user.mail);
-                setWallet(wallet);
-            } catch (e) {
-                console.error('Error getting wallet', e);
-            }
-        };
-        fetchWallet();
-    }, []);
-    const navigation = useNavigation<any>();
+        if (user?.mail) {
+            loadWallet();
+        }
+    }, [user]);
+
+    const loadWallet = async () => {
+        try {
+            const walletData = await getWalletByMail(user!.mail);
+            setWallet(walletData);
+        } catch (error) {
+            console.error('Error loading wallet:', error);
+        }
+    };
+
+    const handleLogout = async () => {
+        await removeUser();
+    };
 
     const buttonAction = () => {
         navigation.navigate('Transfer', {user});
@@ -33,9 +37,12 @@ const HomeScreen: React.FC<Props> = ({ route }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Bienvenido, {user.name}!</Text>
+            <Text style={styles.title}>Bienvenido, {user!.name}!</Text>
             {wallet !== null && <WalletInfo wallet={wallet} />}
             <ActionsContainer action1={buttonAction} action2={buttonAction}/>
+            <TouchableOpacity onPress={handleLogout}>
+                <Text style={styles.title}>Salir</Text>
+            </TouchableOpacity>
         </View>
     );
 };
