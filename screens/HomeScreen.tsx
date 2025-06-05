@@ -1,16 +1,34 @@
-import React from 'react';
+// screens/HomeScreen.tsx
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
+import { getWalletByMail } from '../api/api';
+import WalletInfo from '../components/WalletInfo';
+import {WalletResponseDTO} from "../dto/wallet.dto";
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 const HomeScreen: React.FC<Props> = ({ route }) => {
     const { user } = route.params;
+    const [wallet, setWallet] = useState<WalletResponseDTO | null>(null);
+
+    useEffect(() => {
+        const fetchWallet = async () => {
+            try {
+                const wallet = await getWalletByMail(user.mail);
+                setWallet(wallet);
+            } catch (e) {
+                console.error('Error getting wallet', e);
+            }
+        };
+        fetchWallet();
+    }, []);
 
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Bienvenido, {user.name} {user.lastname}</Text>
+            <Text style={styles.title}>Bienvenido, {user.name}!</Text>
+            {wallet !== null && <WalletInfo wallet={wallet} />}
         </View>
     );
 };
@@ -19,11 +37,13 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
+        padding: 24,
         alignItems: 'center',
+        justifyContent: 'center',
     },
-    text: {
-        fontSize: 20,
+    title: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        marginBottom: 16,
     },
 });
