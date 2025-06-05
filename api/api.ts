@@ -20,17 +20,17 @@ const api = axios.create({
 
 // Users
 export const registerUser = async (userData: RegisterRequestDTO): Promise<RegisterResponseDTO> => {
-    const response = await api.post('/register', userData);
+    const response = await api.post('/user/register', userData);
     return response.data;
 };
 
 export const loginUser = async (credentials: LoginRequestDTO): Promise<LoginResponseDTO> => {
-    const response = await api.post('/login', credentials);
+    const response = await api.post('/user/login', credentials);
     return response.data;
 };
 
 export const getAllUsers = async (): Promise<UserResponseDTO[]> => {
-    const response = await api.get('/users');
+    const response = await api.get('/user/users');
     return response.data;
 };
 
