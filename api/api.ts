@@ -52,12 +52,12 @@ export const createWalletForUser = async (userMail: string): Promise<WalletRespo
 
 // Transactions
 export const sendP2PTransaction = async (data: P2PTransferDTO): Promise<TransactionResponseDTO> => {
-    const response = await api.post('/transactions/p2p', data);
+    const response = await api.post('/transaction/transfer', data);
     return response.data;
 };
 
-export const depositToWallet = async (data: DepositDTO): Promise<TransactionResponseDTO> => {
-    const response = await api.post('/transactions/deposit', data);
+export const depositToWallet = async (depositData: DepositDTO): Promise<TransactionResponseDTO> => {
+    const response = await api.post('/transaction/deposit', depositData);
     return response.data;
 };
 
