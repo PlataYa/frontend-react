@@ -41,7 +41,7 @@ export const getWalletByCVU = async (cvu: number): Promise<WalletResponseDTO> =>
 };
 
 export const getWalletByMail = async (userMail: string): Promise<WalletResponseDTO> => {
-    const response = await api.get(`/wallet/mail/${userMail}`);
+    const response = await api.get(`/wallet/mine?mail=${encodeURIComponent(userMail)}`);
     return response.data;
 };
 
