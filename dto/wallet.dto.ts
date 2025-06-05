@@ -1,5 +1,9 @@
 export interface WalletResponseDTO {
     cvu: number;
     balance: number;
-    userName: string;
+    userMail: string;
+}
+
+export interface AllWalletsResponseDTO {
+    wallets: WalletResponseDTO[];
 }
