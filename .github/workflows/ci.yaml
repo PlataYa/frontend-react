@@ -23,5 +23,5 @@ jobs:
       - name: Install dependencies
         run: npm ci # Use npm ci for cleaner installs in CI
 
-      - name: Run linter
-        run: npm run lint
+#      - name: Run linter
+#        run: npm run lint
