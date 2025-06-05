@@ -3,7 +3,6 @@ export interface RegisterRequestDTO {
     lastname: string;
     mail: string;
     password: string;
-    dayOfBirth: string;
 }
 
 export interface RegisterResponseDTO {

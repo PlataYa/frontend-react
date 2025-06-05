@@ -4,11 +4,15 @@ import TextInputField from './TextInputField';
 import PrimaryButton from './PrimaryButton';
 import { loginUser } from '../api/api';
 import { useNavigation } from '@react-navigation/native';
+import {NativeStackNavigationProp} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../navigation/types";
 
 const LoginCard: React.FC = () => {
     const [mail, setMail] = useState('');
     const [password, setPassword] = useState('');
-    const navigation = useNavigation<any>();
+
+    type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
+    const navigation = useNavigation<NavigationProp>();
 
     const handleLogin = async () => {
         try {

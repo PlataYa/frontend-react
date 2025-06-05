@@ -4,17 +4,21 @@ import TextInputField from './TextInputField';
 import PrimaryButton from './PrimaryButton';
 import { registerUser } from '../api/api';
 import { useNavigation } from '@react-navigation/native';
+import {NativeStackNavigationProp} from "@react-navigation/native-stack";
+import {RootStackParamList} from "../navigation/types";
 
 const RegisterCard: React.FC = () => {
     const [mail, setMail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
     const [lastname, setLastname] = useState('');
-    const navigation = useNavigation<any>();
+
+    type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'Register'>;
+    const navigation = useNavigation<NavigationProp>();
 
     const handleRegister = async () => {
         try {
-            await registerUser({ mail, password, name, lastname, dayOfBirth});
+            await registerUser({ mail, password, name, lastname});
             navigation.navigate('Login');
         } catch {
             Alert.alert('Error', 'Register failed');
