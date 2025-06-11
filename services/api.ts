@@ -56,7 +56,7 @@ export const createWalletForUser = async (userMail: string): Promise<WalletRespo
 };
 
 export const validateCVU = async (cvu: number): Promise<boolean> => {
-    const response = await api.get(`/wallet/valid/${cvu}`);
+    const response = await api.get(`/wallet/valid/cvu?cvu=${cvu}`);
     return response.data.valid;
 }
 
@@ -72,7 +72,7 @@ export const depositToWallet = async (depositData: DepositDTO): Promise<Transact
 };
 
 export const withdrawFromWallet = async (data: WithdrawalDTO): Promise<TransactionResponseDTO> => {
-    const response = await api.post('/transactions/withdraw', data);
+    const response = await api.post('/transaction/withdraw', data);
     return response.data;
 };
 

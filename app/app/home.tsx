@@ -36,9 +36,9 @@ export default function Home() {
             return;
         }
         await sendP2PTransaction({
-            destinationCVU: Number(cvu),
+            payerCvu: user.cvu,
+            payeeCvu: Number(cvu),
             amount: Number(amount),
-            concept: "Transferencia",
             currency: "ARS",
         });
         setShowTransfer(false);
@@ -67,17 +67,13 @@ export default function Home() {
             {wallet ? <WalletInfo wallet={wallet} /> : <Text style={styles.text}>Cargando billetera...</Text>}
 
             <View style={styles.buttons}>
+                <TransactionButton label="Transferir" onPress={() => setShowTransfer(true)} />
                 <TransactionButton label="Depositar" onPress={() => setShowDeposit(true)} />
-                {/*
-                    <TransactionButton label="Transferir" onPress={() => setShowTransfer(true)} />
-                    <TransactionButton label="Extraer" onPress={() => setShowWithdraw(true)} />
-                */}
+                <TransactionButton label="Extraer" onPress={() => setShowWithdraw(true)} />
 
+                <TransactionModal visible={showTransfer} onClose={() => setShowTransfer(false)} onSubmit={handleTransfer} type="transfer" />
                 <TransactionModal visible={showDeposit} onClose={() => setShowDeposit(false)} onSubmit={handleDeposit} type="deposit" />
-                {/*
-                    <TransactionModal visible={showTransfer} onClose={() => setShowTransfer(false)} onSubmit={handleTransfer} type="transfer" />
-                    <TransactionModal visible={showWithdraw} onClose={() => setShowWithdraw(false)} onSubmit={handleWithdraw} type="withdraw" />
-                */}
+                <TransactionModal visible={showWithdraw} onClose={() => setShowWithdraw(false)} onSubmit={handleWithdraw} type="withdraw" />
             </View>
 
             <Pressable style={styles.button} onPress={logout}>
