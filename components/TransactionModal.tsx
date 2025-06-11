@@ -15,7 +15,7 @@ const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type })
     const title = {
         transfer: 'Transferir a CVU',
         deposit: 'Ingresar fondos',
-        withdraw: 'Sacar fondos',
+        withdraw: 'Transferir a cuenta externa',
     }[type];
 
     const handleSubmit = () => {

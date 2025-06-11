@@ -2,11 +2,12 @@
 import {View, Text, StyleSheet, Image, Alert, ScrollView, Pressable} from "react-native";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
-import { getWalletByMail, depositToWallet, validateCVU, sendP2PTransaction, withdrawFromWallet } from "@/services/api";
+import { getWalletByMail, depositToWallet, validateCVU, sendP2PTransaction, withdrawToExternal } from "@/services/api";
 import { WalletDTO } from "@/dto/wallet.dto";
 import WalletInfo from "@/components/WalletInfo";
 import TransactionButton from "@/components/TransactionButton";
 import TransactionModal from "@/components/TransactionModal";
+import TransactionsList from "@/components/TransactionList";
 
 export default function Home() {
     const { user, logout } = useAuth();
@@ -54,7 +55,7 @@ export default function Home() {
     };
 
     const handleWithdraw = async (_: string, amount: string) => {
-        await withdrawFromWallet({ payerCvu: user.cvu, amount: Number(amount), currency: "ARS", externalReference: "manual_withdraw" });
+        await withdrawToExternal({ payerCvu: user.cvu, amount: Number(amount), currency: "ARS", externalReference: "manual_withdraw" });
         setShowWithdraw(false);
         await loadWallet();
         Alert.alert("Éxito", "Extracción realizada");
@@ -63,18 +64,20 @@ export default function Home() {
     return (
         <ScrollView contentContainerStyle={styles.container}>
             <Image style={styles.image} source={require("@/assets/logo.png")}/>
-            <Text style={styles.text}>Bienvenido, {user?.name} {user?.lastname}</Text>
+            <Text style={styles.text}>{user?.name} {user?.lastname}</Text>
             {wallet ? <WalletInfo wallet={wallet} /> : <Text style={styles.text}>Cargando billetera...</Text>}
 
             <View style={styles.buttons}>
-                <TransactionButton label="Transferir" onPress={() => setShowTransfer(true)} />
+                <TransactionButton label="Transferir a PlataYa" onPress={() => setShowTransfer(true)} />
+                <TransactionButton label="Transferir a cuenta externa" onPress={() => setShowWithdraw(true)} />
                 <TransactionButton label="Depositar" onPress={() => setShowDeposit(true)} />
-                <TransactionButton label="Extraer" onPress={() => setShowWithdraw(true)} />
 
                 <TransactionModal visible={showTransfer} onClose={() => setShowTransfer(false)} onSubmit={handleTransfer} type="transfer" />
                 <TransactionModal visible={showDeposit} onClose={() => setShowDeposit(false)} onSubmit={handleDeposit} type="deposit" />
                 <TransactionModal visible={showWithdraw} onClose={() => setShowWithdraw(false)} onSubmit={handleWithdraw} type="withdraw" />
             </View>
+
+            <TransactionsList/>
 
             <Pressable style={styles.button} onPress={logout}>
                 <Text style={styles.buttonText}>Cerrar sesión</Text>

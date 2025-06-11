@@ -71,7 +71,7 @@ export const depositToWallet = async (depositData: DepositDTO): Promise<Transact
     return response.data;
 };
 
-export const withdrawFromWallet = async (data: WithdrawalDTO): Promise<TransactionResponseDTO> => {
+export const withdrawToExternal = async (data: WithdrawalDTO): Promise<TransactionResponseDTO> => {
     const response = await api.post('/transaction/withdraw', data);
     return response.data;
 };
@@ -82,7 +82,7 @@ export const getTransactionById = async (transactionId: number): Promise<Transac
 };
 
 export const getTransactionHistory = async (cvu: number): Promise<TransactionResponseDTO[]> => {
-    const response = await api.get(`/api/v1/transaction/${cvu}/history`);
+    const response = await api.get(`/transaction/${cvu}/history`);
     return response.data;
 };
 
