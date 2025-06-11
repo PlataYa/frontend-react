@@ -16,8 +16,8 @@ export default TransactionButton;
 
 const styles = StyleSheet.create({
     button: {
-        backgroundColor: '#EDEDED',
-        borderRadius: 40,
+        backgroundColor: '#ececed',
+        borderRadius: 16,
         width: 80,
         height: 80,
         alignItems: 'center',
@@ -27,5 +27,7 @@ const styles = StyleSheet.create({
     label: {
         textAlign: 'center',
         fontSize: 12,
+        fontWeight: 'bold',
+        color: '#5500fd',
     },
 });

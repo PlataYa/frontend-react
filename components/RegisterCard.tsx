@@ -3,7 +3,7 @@ import { View, Alert, Text, Pressable, StyleSheet } from 'react-native';
 import TextInputField from './TextInputField';
 import PrimaryButton from './PrimaryButton';
 import { useRouter } from 'expo-router';
-import { useAuth } from '@/hooks/useAuth';
+import {useAuth} from "@/context/AuthContext";
 
 const RegisterCard: React.FC = () => {
     const [mail, setMail] = useState('');

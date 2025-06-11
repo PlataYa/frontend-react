@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { WalletResponseDTO } from '../dto/wallet.dto';
+import { WalletResponseDTO } from '@/dto/wallet.dto';
 
 interface Props {
     wallet: WalletResponseDTO;

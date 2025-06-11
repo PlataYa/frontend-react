@@ -1,5 +1,5 @@
 import { Redirect, Slot } from "expo-router";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/context/AuthContext"
 
 export default function ProtectedLayout() {
     const { user, isLoading } = useAuth();

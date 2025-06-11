@@ -1,6 +1,5 @@
-import {View, StyleSheet, Text} from "react-native";
+import {View, StyleSheet} from "react-native";
 import LoginCard from "@/components/LoginCard";
-import * as SecureStore from "expo-secure-store";
 
 export default function LoginScreen() {
 
