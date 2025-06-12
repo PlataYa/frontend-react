@@ -19,7 +19,7 @@ export default function TransactionsList() {
         <View style={styles.item}>
             <Text style={styles.type}>{item.type}</Text>
             <Text style={styles.detail}>Monto: ${item.amount} {item.currency}</Text>
-            <Text style={styles.detail}>Fecha: {new Date(item.createdAt).toLocaleString()}</Text>
+            <Text style={styles.detail}>Fecha: {item.timestamp}</Text>
             <Text style={styles.detail}>Estado: {item.status}</Text>
             <Text style={styles.detail}>Desde: {item.payerCvu}</Text>
             <Text style={styles.detail}>Hacia: {item.payeeCvu}</Text>
@@ -29,7 +29,7 @@ export default function TransactionsList() {
     return (
         <FlatList
             data={transactions}
-            keyExtractor={(item) => item.transactionId.toString()}
+            keyExtractor={(item) => `${item.id}`}
             renderItem={renderItem}
             contentContainerStyle={styles.container}
         />
@@ -39,6 +39,7 @@ export default function TransactionsList() {
 const styles = StyleSheet.create({
     container: {
         padding: 10,
+        width: 300,
     },
     item: {
         backgroundColor: '#f0f0f0',

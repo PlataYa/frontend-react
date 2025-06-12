@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#eee',
         borderRadius: 8,
         margin: 16,
+        width: 300,
     },
     text: {
         fontSize: 16,

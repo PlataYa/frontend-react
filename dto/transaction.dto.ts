@@ -28,4 +28,5 @@ export interface TransactionResponseDTO {
     timestamp: string;
     type: string;
     externalReference?: string;
+    status: string;
 }

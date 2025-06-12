@@ -1,13 +1,15 @@
-import {View, StyleSheet} from "react-native";
+import {View, StyleSheet, Image} from "react-native";
 import LoginCard from "@/components/LoginCard";
+import AddNavbar from "@/components/AddNavbar";
 
 export default function LoginScreen() {
 
     return(
-        <View style={styles.container}>
-            {}
-            <LoginCard/>
-        </View>
+        <AddNavbar withLogout={false}>
+            <View style={styles.container}>
+                <LoginCard/>
+            </View>
+        </AddNavbar>
     )
 }
 
@@ -21,5 +23,10 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 24,
         color: "#333"
+    },
+    image: {
+        width: 100,
+        height: 100,
+        marginBottom: 20
     }
 });
