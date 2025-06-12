@@ -1,0 +1,11 @@
+{
+  "transactionId": 2,
+  "type": "WITHDRAWAL",
+  "sourceCvu": 12345678901,
+  "destinationCvu": 98765432109,
+  "amount": 75.50,
+  "currency": "ARS",
+  "status": "COMPLETED",
+  "externalReference": "Banco Nación",
+  "createdAt": "2024-01-15T10:35:00"
+} 

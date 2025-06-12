@@ -1,0 +1,10 @@
+{
+  "transactionId": 1,
+  "type": "P2P",
+  "payerCvu": 12345678901,
+  "payeeCvu": 98765432109,
+  "amount": 150.75,
+  "currency": "ARS",
+  "status": "COMPLETED",
+  "createdAt": "2024-01-15T10:30:00"
+} 

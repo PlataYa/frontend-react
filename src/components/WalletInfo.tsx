@@ -8,8 +8,8 @@ interface Props {
 const WalletInfo: React.FC<Props> = ({ wallet }) => {
     return (
         <div className="card" style={{ padding: '16px', backgroundColor: '#eee', borderRadius: '8px', margin: '16px' }}>
-            <p style={{ fontSize: '16px', marginBottom: '8px' }}>CVU: {wallet.cvu}</p>
-            <p style={{ fontSize: '16px', marginBottom: '8px' }}>Balance: ${wallet.balance}</p>
+            <p data-testid="wallet-cvu" style={{ fontSize: '16px', marginBottom: '8px' }}>CVU: {wallet.cvu}</p>
+            <p data-testid="wallet-balance" style={{ fontSize: '16px', marginBottom: '8px' }}>Balance: ${wallet.balance}</p>
         </div>
     );
 };

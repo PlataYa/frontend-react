@@ -26,7 +26,7 @@ export default function TransactionsList() {
     };
 
     return (
-        <div style={{ maxWidth: '300px', marginTop: '20px' }}>
+        <div data-testid="transaction-list" style={{ maxWidth: '300px', marginTop: '20px' }}>
             {transactions.length === 0 ? (
                 <p style={{ textAlign: 'center' }}>No hay transacciones recientes.</p>
             ) : (

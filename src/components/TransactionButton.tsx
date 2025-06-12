@@ -14,6 +14,7 @@ const icons: Record<string, string> = {
 const TransactionButton: React.FC<Props> = ({ label, onPress, img }) => (
     <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
         <button
+            data-testid={`${img}-button`}
             onClick={onPress}
             style={{
                 backgroundColor: 'rgba(85,0,253,0.15)',

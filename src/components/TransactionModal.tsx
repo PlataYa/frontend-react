@@ -67,7 +67,7 @@ const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type })
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
             zIndex: 1000
         }}>
-            <div className="card" style={{
+            <div data-testid="transaction-modal" className="card" style={{
                 margin: '24px',
                 backgroundColor: '#fff',
                 borderRadius: '12px',
