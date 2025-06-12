@@ -14,12 +14,31 @@ import {
     TransactionResponseDTO
 } from '../dto/transaction.dto';
 
+// Definimos la URL base de la API, usando la variable de entorno si está disponible
+// o una URL por defecto en caso contrario
+const API_BASE_URL = process.env.REACT_APP_API_URL;
+
+// Log para debugging en desarrollo
+console.log('API_BASE_URL:', API_BASE_URL);
+
 const api = axios.create({
-    baseURL: process.env.EXPO_PUBLIC_API_URL,
+    baseURL: API_BASE_URL,
 });
+
+// Añadir interceptor para debugging
+api.interceptors.request.use(
+    (config) => {
+        console.log(`Realizando petición a: ${config.baseURL}${config.url}`);
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
 
 // Users
 export const registerUser = async (userData: RegisterRequestDTO): Promise<RegisterResponseDTO> => {
+    console.log("registrando");
     const response = await api.post('/user/register', userData);
     return response.data;
 };
