@@ -4,6 +4,9 @@
   "private": true,
   "homepage": ".",
   "dependencies": {
+    "@capacitor/android": "^7.3.0",
+    "@capacitor/cli": "^7.3.0",
+    "@capacitor/core": "^7.3.0",
     "axios": "^1.9.0",
     "crypto-browserify": "^3.12.1",
     "dotenv": "^16.5.0",
