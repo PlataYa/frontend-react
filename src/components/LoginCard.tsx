@@ -14,6 +14,9 @@ const LoginCard: React.FC = () => {
     const { login, error } = useAuth();
     const navigate = useNavigate();
 
+    const isSecurePassword = (pass: string) =>
+        /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(pass);
+
     const handleLogin = async () => {
         setValidationError('');
 
@@ -22,13 +25,18 @@ const LoginCard: React.FC = () => {
             return;
         }
 
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) {
+        if (!mail && !password) {
+            setValidationError('Todos los campos son obligatorios.');
+            return;
+        }
+
+        if (!mail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) {
             setValidationError('Email inválido');
             return;
         }
 
-        if (password.length < 8) {
-            setValidationError('La contraseña debe tener al menos 8 caracteres');
+        if (!isSecurePassword(password)) {
+            setValidationError('La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un símbolo.');
             return;
         }
 
@@ -36,8 +44,12 @@ const LoginCard: React.FC = () => {
         if (success) {
             navigate("/");
         } else {
-            setValidationError('Email o contraseña incorrectos');
             setAttempts(prev => prev + 1);
+            if (attempts + 1 >= MAX_ATTEMPTS) {
+                setValidationError('Demasiados intentos. Por favor, espere o reinicie la app.');
+            } else {
+                setValidationError('Email o contraseña incorrectos');
+            }
         }
     };
 

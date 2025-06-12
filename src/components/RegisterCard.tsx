@@ -28,6 +28,11 @@ const RegisterCard: React.FC = () => {
     const handleRegister = async () => {
         setValidationError('');
 
+        if (!mail || !password || !name || !lastname || !dayOfBirth) {
+            setValidationError('Todos los campos son obligatorios.');
+            return;
+        }
+
         if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(name) || !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(lastname)) {
             setValidationError('Nombre y apellido deben contener solo letras.');
             return;
@@ -49,18 +54,14 @@ const RegisterCard: React.FC = () => {
         }
 
         const birthdate = new Date(dayOfBirth);
-        if (isNaN(birthdate.getTime())) {
+        const today = new Date();
+        if (isNaN(birthdate.getTime()) || birthdate > today) {
             setValidationError('La fecha ingresada no es válida.');
             return;
         }
 
         if (!isAdult(birthdate)) {
             setValidationError('Debés tener al menos 18 años.');
-            return;
-        }
-
-        if (!mail || !password || !name || !lastname || !dayOfBirth) {
-            setValidationError('Todos los campos son obligatorios.');
             return;
         }
 
