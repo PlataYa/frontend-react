@@ -19,15 +19,16 @@ const LoginCard: React.FC = () => {
 
     return (
         <div className="card">
-            <h2 data-testid="main-title" className="text-center mb-3">Iniciar Sesión</h2>
-            <TextInputField placeholder="Email" value={mail} onChangeText={setMail} keyboardType="email-address" />
-            <TextInputField placeholder="Contraseña" value={password} onChangeText={setPassword} secureTextEntry />
-            <PrimaryButton title="Iniciar Sesión" onPress={handleLogin} />
+            <h2 id="main-title" className="text-center mb-3">Iniciar Sesión</h2>
+            <TextInputField id={"login-email"} placeholder="Email" value={mail} onChangeText={setMail} keyboardType="email-address" />
+            <TextInputField id={"login-password"} placeholder="Contraseña" value={password} onChangeText={setPassword} secureTextEntry />
+            <PrimaryButton id={"login-button"} title="Iniciar Sesión" onPress={handleLogin} />
             {error ? <p style={{ color: 'red', textAlign: 'center', marginTop: '10px' }}>Error al iniciar sesión.</p> : null}
             <button
-                data-testid="redirect-register-button"
+                id="redirect-register-button"
                 onClick={() => navigate("/auth/register")}
                 style={{ marginTop: '10px', color: '#6C63FF', textAlign: 'center', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
+                accessKey="register"
             >
                 No tenés cuenta? Registrate
             </button>

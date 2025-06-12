@@ -1,16 +1,17 @@
 import React from 'react';
 
 interface Props {
+    id?: string;
     title: string;
     onPress: () => void;
     disabled?: boolean;
 }
 
-const PrimaryButton: React.FC<Props> = ({ title, onPress, disabled = false }) => {
+const PrimaryButton: React.FC<Props> = ({ id, title, onPress, disabled = false }) => {
     return (
         <button
-            data-testid={title.replace(/\s+/g, '-').toLowerCase()}
-            className={`button ${disabled ? 'disabled' : ''}`} 
+            id={id}
+            className={`button ${disabled ? 'disabled' : ''}`}
             onClick={onPress} 
             disabled={disabled}
         >

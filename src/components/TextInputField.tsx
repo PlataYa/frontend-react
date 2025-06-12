@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 interface Props {
+    id?: string;
     placeholder: string;
     value: string;
     onChangeText: (text: string) => void;
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const TextInputField: React.FC<Props> = ({
+    id,
     placeholder,
     value,
     onChangeText,
@@ -37,7 +39,7 @@ const TextInputField: React.FC<Props> = ({
 
     return (
         <input
-            data-testid={placeholder.replace(/\s+/g, '-').toLowerCase()}// Convert placeholder to a valid test ID
+            id={id}
             className={`input ${focused ? 'focused' : ''}`}
             type={getInputType()}
             placeholder={placeholder}

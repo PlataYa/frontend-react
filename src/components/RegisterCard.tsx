@@ -54,17 +54,18 @@ const RegisterCard: React.FC = () => {
 
     return (
         <div className="card">
-            <h2 data-testid="main-title" className="text-center mb-3">Registrarse</h2>
-            <TextInputField placeholder="Nombre" value={name} onChangeText={setName} />
-            <TextInputField placeholder="Apellido" value={lastname} onChangeText={setLastname} />
-            <TextInputField placeholder="Email" value={mail} onChangeText={setMail} keyboardType="email-address" />
-            <TextInputField placeholder="Contraseña" value={password} onChangeText={setPassword} secureTextEntry />
+            <h2 id="main-title" className="text-center mb-3">Registrarse</h2>
+            <TextInputField id={"register-name"} placeholder="Nombre" value={name} onChangeText={setName} />
+            <TextInputField id={"register-lastname"} placeholder="Apellido" value={lastname} onChangeText={setLastname} />
+            <TextInputField id={"register-email"} placeholder="Email" value={mail} onChangeText={setMail} keyboardType="email-address" />
+            <TextInputField id={"register-password"} placeholder="Contraseña" value={password} onChangeText={setPassword} secureTextEntry />
             <TextInputField
+                id="register-birthdate"
                 placeholder="Fecha de nacimiento (YYYY-MM-DD)"
                 value={dayOfBirth}
                 onChangeText={setDayOfBirth}
             />
-            <PrimaryButton title="Registrarme" onPress={handleRegister} />
+            <PrimaryButton id={"register-button"} title="Registrarme" onPress={handleRegister} />
 
             {(validationError || error) && (
                 <p style={{ marginTop: '8px', color: 'red', textAlign: 'center' }}>
@@ -73,7 +74,7 @@ const RegisterCard: React.FC = () => {
             )}
 
             <button
-              data-testid="redirect-login-button"
+                id="redirect-login-button"
                 onClick={() => navigate("/auth/login")}
                 style={{ marginTop: '10px', color: '#6C63FF', textAlign: 'center', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
             >
