@@ -31,7 +31,7 @@ const WithdrawScreen: React.FC = () => {
 
         try {
             await withdrawFromWallet({
-                payerCvu: user.cvu,
+                sourceCvu: user.cvu,
                 amount: Number(amount),
                 currency: "ARS",
                 externalReference: "manual_withdraw"

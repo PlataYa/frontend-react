@@ -1,7 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import HomeScreen from '../screens/app/HomeScreen';
 import TransferScreen from '../screens/app/TransferScreen';
-import DepositScreen from '../screens/app/DepositScreen';
 import WithdrawScreen from '../screens/app/WithdrawScreen';
 
 // Temporary placeholder components  
@@ -13,7 +12,6 @@ export default function MainRoutes() {
       <Route path="/" element={<HomeScreen />} />
       <Route path="/wallet" element={<WalletScreen />} />
       <Route path="/transfer" element={<TransferScreen />} />
-      <Route path="/deposit" element={<DepositScreen />} />
       <Route path="/withdraw" element={<WithdrawScreen />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
