@@ -128,6 +128,8 @@ jobs:
         with:
           context: .
           push: true
+          build-args: |
+            REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}
           tags: |
             ghcr.io/plataya/frontend:latest
             ghcr.io/plataya/frontend:v${{ needs.create_release.outputs.version }}
