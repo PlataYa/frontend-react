@@ -7,6 +7,7 @@ import Storage from "../utils/Storage";
 interface AuthContextType {
     user: LoginResponseDTO | null;
     isLoading: boolean;
+    isRestoring: boolean;
     error: string | null;
     login: (data: LoginRequestDTO) => Promise<boolean>;
     register: (data: RegisterRequestDTO) => Promise<boolean>;
@@ -19,10 +20,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [user, setUser] = useState<LoginResponseDTO | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isRestoring, setIsRestoring] = useState(true);
 
     useEffect(() => {
         const restoreUser = async () => {
-            setIsLoading(true);
+            setIsRestoring(true);
             try {
                 const stored = await Storage.getItem("user");
                 if (stored) {
@@ -31,7 +33,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             } catch (err: any) {
                 setError(err.message);
             } finally {
-                setIsLoading(false);
+                setIsRestoring(false);
             }
         };
         restoreUser();
@@ -81,7 +83,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <AuthContext.Provider value={{ user, isLoading, error, login, register, logout }}>
+        <AuthContext.Provider value={{ user, isLoading, isRestoring, error, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     );

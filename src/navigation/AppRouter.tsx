@@ -4,9 +4,9 @@ import AuthRoutes from './AuthRoutes';
 import MainRoutes from './MainRoutes';
 
 export default function AppRouter() {
-  const { user, isLoading } = useAuth();
+  const { user, isRestoring } = useAuth();
 
-  if (isLoading) {
+  if (isRestoring) {
     return (
       <div className="container">
         <div>Cargando...</div>

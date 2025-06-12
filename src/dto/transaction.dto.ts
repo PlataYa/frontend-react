@@ -20,6 +20,7 @@ export interface WithdrawalDTO {
 }
 
 export interface TransactionResponseDTO {
+    status: string;
     id: number;
     payerCvu?: number;
     payeeCvu?: number;

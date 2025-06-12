@@ -10,6 +10,7 @@ interface Props {
 const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type }) => {
     const [cvu, setCvu] = useState('');
     const [amount, setAmount] = useState('');
+    const [error, setError] = useState('');
 
     const title = {
         transfer: 'Transferir a CVU',
@@ -18,6 +19,29 @@ const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type })
     }[type];
 
     const handleSubmit = () => {
+        setError('');
+
+        if (!amount) {
+            setError("Monto requerido. Por favor, ingrese un monto.");
+            return;
+        }
+
+        if (type === 'transfer' && !cvu) {
+            setError("CVU requerido. Por favor, ingrese un CVU.");
+            return;
+        }
+
+        if (type === 'transfer' && !/^\d{12}$/.test(cvu)) {
+            setError("CVU inválido. Debe tener 12 dígitos.");
+            return;
+        }
+
+        const monto = Number(amount);
+        if (!/^\d+(\.\d{1,2})?$/.test(amount) || monto <= 0 || monto > 1000000) {
+            setError("Monto inválido. Debe ser un número positivo y menor a 1,000,000.");
+            return;
+        }
+
         onSubmit(cvu, amount);
         setCvu('');
         setAmount('');
@@ -47,27 +71,26 @@ const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type })
                 minWidth: '300px',
                 boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
             }}>
-                <h3 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '12px' }}>
-                    {title}
-                </h3>
+                <h3 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '12px' }}>{title}</h3>
                 {type === 'transfer' && (
-                    <input 
+                    <input
                         type="number"
-                        placeholder="CVU destino" 
+                        placeholder="CVU destino"
                         className="input"
-                        onChange={(e) => setCvu(e.target.value)} 
-                        value={cvu}  
+                        onChange={(e) => setCvu(e.target.value)}
+                        value={cvu}
                         style={{ marginBottom: '12px' }}
                     />
                 )}
-                <input 
+                <input
                     type="number"
-                    placeholder="Monto" 
+                    placeholder="Monto"
                     className="input"
-                    onChange={(e) => setAmount(e.target.value)} 
+                    onChange={(e) => setAmount(e.target.value)}
                     value={amount}
                     style={{ marginBottom: '12px' }}
                 />
+                {error && <p style={{ color: 'red', marginBottom: '12px' }}>{error}</p>}
                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px' }}>
                     <button className="button" onClick={onClose} style={{ backgroundColor: '#ccc', color: '#000' }}>
                         Cancelar
