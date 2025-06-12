@@ -54,7 +54,7 @@ const RegisterCard: React.FC = () => {
 
     return (
         <div className="card">
-            <h2 className="text-center mb-3">Registrarse</h2>
+            <h2 data-testid="main-title" className="text-center mb-3">Registrarse</h2>
             <TextInputField placeholder="Nombre" value={name} onChangeText={setName} />
             <TextInputField placeholder="Apellido" value={lastname} onChangeText={setLastname} />
             <TextInputField placeholder="Email" value={mail} onChangeText={setMail} keyboardType="email-address" />
@@ -72,7 +72,8 @@ const RegisterCard: React.FC = () => {
                 </p>
             )}
 
-            <button 
+            <button
+              data-testid="redirect-login-button"
                 onClick={() => navigate("/auth/login")}
                 style={{ marginTop: '10px', color: '#6C63FF', textAlign: 'center', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
             >

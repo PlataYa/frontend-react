@@ -37,6 +37,7 @@ const TextInputField: React.FC<Props> = ({
 
     return (
         <input
+            data-testid={placeholder.replace(/\s+/g, '-').toLowerCase()}// Convert placeholder to a valid test ID
             className={`input ${focused ? 'focused' : ''}`}
             type={getInputType()}
             placeholder={placeholder}

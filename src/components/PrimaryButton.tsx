@@ -8,7 +8,8 @@ interface Props {
 
 const PrimaryButton: React.FC<Props> = ({ title, onPress, disabled = false }) => {
     return (
-        <button 
+        <button
+            data-testid={title.replace(/\s+/g, '-').toLowerCase()}
             className={`button ${disabled ? 'disabled' : ''}`} 
             onClick={onPress} 
             disabled={disabled}
