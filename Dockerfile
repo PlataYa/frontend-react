@@ -12,6 +12,10 @@ RUN npm ci
 # Copiar código fuente
 COPY . .
 
+# Agregar soporte para variables de entorno en tiempo de build
+ARG REACT_APP_API_URL
+ENV REACT_APP_API_URL=${REACT_APP_API_URL}
+
 # Construir la aplicación
 RUN npm run build
 
