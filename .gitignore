@@ -1,40 +1,71 @@
-# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
-
-# dependencies
+# Dependencias
 node_modules/
+.pnp
+.pnp.js
 
-# Expo
-.expo/
-dist/
+# Testing
+/coverage
+
+# Producción
+/build
+/dist
 web-build/
-expo-env.d.ts
 
-# Native
+# Capacitor/Expo
+.expo/
+.expo-shared/
+expo-env.d.ts
+ios/
+android/build/
+android/app/build/
+android/capacitor-cordova-android-plugins/build/
+android/.gradle/
+android/.idea/
+android/local.properties
 .kotlin/
+
+# Archivos de ambiente
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+!.env.example
+
+# Logs
+logs
+*.log
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+.metro-health-check*
+
+# Editor y sistema
+.DS_Store
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.sublime-workspace
+.project
+.classpath
+.settings/
+
+# Archivos nativos
 *.orig.*
 *.jks
 *.p8
 *.p12
 *.key
 *.mobileprovision
-
-# Metro
-.metro-health-check*
-
-# debug
-npm-debug.*
-yarn-debug.*
-yarn-error.*
-
-# macOS
-.DS_Store
+*.keystore
 *.pem
 
-# local env files
-.env*.local
-
-# typescript
+# TypeScript
 *.tsbuildinfo
 
+# Personalizaciones
 app-example
-/.env
