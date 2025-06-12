@@ -1,12 +1,13 @@
 // AuthContext.tsx
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Storage from "@/utils/Storage";
-import { LoginResponseDTO, LoginRequestDTO, RegisterRequestDTO } from "../dto/user.dto";
+import { LoginResponseDTO, LoginRequestDTO, RegisterRequestDTO } from "@/dto/user.dto";
 import { loginUser, registerUser } from "@/services/api";
 
 interface AuthContextType {
     user: LoginResponseDTO | null;
     isLoading: boolean;
+    isRestoring: boolean;
     error: string | null;
     login: (data: LoginRequestDTO) => Promise<boolean>;
     register: (data: RegisterRequestDTO) => Promise<boolean>;
@@ -19,19 +20,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [user, setUser] = useState<LoginResponseDTO | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [isRestoring, setIsRestoring] = useState(true);
 
     useEffect(() => {
         const restoreUser = async () => {
-            setIsLoading(true);
+            setIsRestoring(true);
             try {
                 const stored = await Storage.getItem("user");
-                if (stored) {
-                    setUser(JSON.parse(stored));
-                }
+                if (stored) setUser(JSON.parse(stored));
             } catch (err: any) {
                 setError(err.message);
             } finally {
-                setIsLoading(false);
+                setIsRestoring(false);
             }
         };
         restoreUser();
@@ -58,7 +58,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setError(null);
         try {
             await registerUser(data);
-            return true; // no se guarda usuario
+            return true;
         } catch (err: any) {
             setError(err.response?.data?.message || err.message || "Error al registrarse");
             return false;
@@ -81,7 +81,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <AuthContext.Provider value={{ user, isLoading, error, login, register, logout }}>
+        <AuthContext.Provider value={{ user, isLoading, isRestoring, error, login, register, logout }}>
             {children}
         </AuthContext.Provider>
     );
@@ -89,8 +89,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 export const useAuth = (): AuthContextType => {
     const context = useContext(AuthContext);
-    if (context === undefined) {
-        throw new Error("useAuth debe usarse dentro de AuthProvider");
-    }
+    if (context === undefined) throw new Error("useAuth debe usarse dentro de AuthProvider");
     return context;
 };

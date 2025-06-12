@@ -2,9 +2,9 @@ import { Redirect, Slot } from "expo-router";
 import { useAuth } from "@/context/AuthContext"
 
 export default function AuthLayout() {
-    const { user, isLoading } = useAuth();
+    const { user, isRestoring } = useAuth();
 
-    if (isLoading) return null;
+    if (isRestoring) return null;
 
     if (user) {
         return <Redirect href="/app/home" />;

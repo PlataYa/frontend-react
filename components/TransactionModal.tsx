@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Modal, View, Text, TextInput, StyleSheet, Button } from 'react-native';
+import {Modal, View, Text, TextInput, StyleSheet, Button, Alert} from 'react-native';
+import Toast from 'react-native-toast-message';
 
 interface Props {
     visible: boolean;
@@ -11,6 +12,7 @@ interface Props {
 const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type }) => {
     const [cvu, setCvu] = useState('');
     const [amount, setAmount] = useState('');
+    const [error, setError] = useState('');
 
     const title = {
         transfer: 'Transferir a CVU',
@@ -19,6 +21,27 @@ const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type })
     }[type];
 
     const handleSubmit = () => {
+        if (!amount) {
+            setError("Monto requerido. Por favor, ingrese un monto.");
+            return;
+        }
+
+        if (type === 'transfer' && !cvu) {
+            setError("CVU requerido. Por favor, ingrese un CVU.");
+            return;
+        }
+
+        if (type === 'transfer' && !/^\d{12}$/.test(cvu)) {
+            setError("CVU inválido. Debe tener 12 dígitos.");
+            return;
+        }
+
+        const monto = Number(amount);
+        if (!/^\d+(\.\d{1,2})?$/.test(amount) || monto <= 0 || monto > 1000000) {
+            setError("Monto inválido. Debe ser un número positivo y menor a 1,000,000.");
+            return;
+        }
+
         onSubmit(cvu, amount);
         setCvu('');
         setAmount('');
@@ -34,6 +57,7 @@ const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type })
                         <TextInput placeholder="CVU destino" style={styles.input} onChangeText={setCvu} value={cvu} keyboardType="numeric" />
                     )}
                     <TextInput placeholder="Monto" style={styles.input} onChangeText={setAmount} value={amount} keyboardType="numeric" />
+                    {error ? <Text style={{ color: 'red', marginBottom: 12 }}>{error}</Text> : null}
                     <View style={styles.actions}>
                         <Button title="Cancelar" onPress={onClose} />
                         <Button title="Confirmar" onPress={handleSubmit} />
@@ -53,7 +77,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#00000088',
     },
     card: {
+        alignSelf: 'center',
         margin: 24,
+        width: '60%',
         backgroundColor: '#fff',
         borderRadius: 12,
         padding: 20,

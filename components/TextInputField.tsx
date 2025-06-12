@@ -30,6 +30,7 @@ const TextInputField: React.FC<Props> = ({ label, value, onChangeText, secureTex
 const styles = StyleSheet.create({
     container: {
         marginBottom: 16,
+        flex: 1,
     },
     label: {
         fontSize: 14,
