@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Alert, Text, Pressable, StyleSheet } from 'react-native';
+import { Platform, View, Alert, Text, Pressable, StyleSheet } from 'react-native';
 import TextInputField from './TextInputField';
 import PrimaryButton from './PrimaryButton';
 import { useRouter } from 'expo-router';
@@ -41,7 +41,7 @@ const RegisterCard: React.FC = () => {
 
         const success = await register({ mail, password, name, lastname, dayOfBirth });
         if (success) {
-            router.replace("/app/login");
+            router.replace("/auth/login");
         }
     };
 
@@ -55,8 +55,10 @@ const RegisterCard: React.FC = () => {
 
     return (
         <View>
-            <TextInputField label="Nombre" value={name} onChangeText={setName} />
-            <TextInputField label="Apellido" value={lastname} onChangeText={setLastname} />
+            <View style={styles.row}>
+                <TextInputField label="Nombre" value={name} onChangeText={setName} />
+                <TextInputField label="Apellido" value={lastname} onChangeText={setLastname} />
+            </View>
             <TextInputField label="Email" value={mail} onChangeText={setMail} keyboardType="email-address" />
             <TextInputField label="Contraseña" value={password} onChangeText={setPassword} secureTextEntry />
             <TextInputField
@@ -90,5 +92,10 @@ const styles = StyleSheet.create({
         marginTop: 8,
         color: 'red',
         textAlign: 'center',
+    },
+    row: {
+        flexDirection: Platform.OS === 'web' ? 'row' : 'column',
+        justifyContent: 'space-between',
+        gap: 10,
     },
 });
