@@ -33,3 +33,4 @@ EXPOSE 80
 
 # Iniciar nginx
 CMD ["nginx", "-g", "daemon off;"]
+
