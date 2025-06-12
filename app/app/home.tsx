@@ -9,9 +9,10 @@ import TransactionButton from "@/components/TransactionButton";
 import TransactionModal from "@/components/TransactionModal";
 import TransactionsList from "@/components/TransactionList";
 import AddNavbar from "@/components/AddNavbar";
+import Toast from "react-native-toast-message";
 
 export default function Home() {
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
     const [wallet, setWallet] = useState<WalletResponseDTO | null>(null);
     const [showTransfer, setShowTransfer] = useState(false);
     const [showDeposit, setShowDeposit] = useState(false);
@@ -32,34 +33,50 @@ export default function Home() {
     };
 
     const handleTransfer = async (cvu: string, amount: string) => {
-        const valid = await validateCVU(Number(cvu));
-        if (!valid) {
-            Alert.alert("CVU inválido", "No se encontró una cuenta con ese CVU");
-            return;
+        try {
+            const valid = await validateCVU(Number(cvu));
+            if (!valid) {
+                Toast.show({ type: 'error', text1: 'CVU inválido', text2: 'No se encontró una cuenta con ese CVU' });
+                return;
+            }
+
+            await sendP2PTransaction({
+                payerCvu: user?.cvu!,
+                payeeCvu: Number(cvu),
+                amount: Number(amount),
+                currency: "ARS",
+            });
+            setShowTransfer(false);
+            await loadWallet();
+            Toast.show({ type: 'success', text1: 'Transferencia realizada' });
+        } catch (error) {
+            setShowTransfer(false);
+            Toast.show({ type: 'error', text1: 'Error', text2: 'No se pudo completar la transferencia' });
         }
-        await sendP2PTransaction({
-            payerCvu: user?.cvu!,
-            payeeCvu: Number(cvu),
-            amount: Number(amount),
-            currency: "ARS",
-        });
-        setShowTransfer(false);
-        await loadWallet();
-        Alert.alert("Éxito", "Transferencia realizada");
     };
 
     const handleDeposit = async (_: string, amount: string) => {
-        await depositToWallet({ payeeCvu: user?.cvu!, amount: Number(amount), currency: "ARS", externalReference: "manual_deposit" });
-        setShowDeposit(false);
-        await loadWallet();
-        Alert.alert("Éxito", "Depósito realizado");
+        try {
+            await depositToWallet({ payeeCvu: user?.cvu!, amount: Number(amount), currency: "ARS", externalReference: "manual_deposit" });
+            setShowDeposit(false);
+            await loadWallet();
+            Toast.show({ type: 'success', text1: 'Depósito realizado' });
+        } catch (error) {
+            setShowDeposit(false);
+            Toast.show({ type: 'error', text1: 'Error', text2: 'No se pudo completar el depósito' });
+        }
     };
 
     const handleWithdraw = async (_: string, amount: string) => {
-        await withdrawToExternal({ payerCvu: user?.cvu!, amount: Number(amount), currency: "ARS", externalReference: "manual_withdraw" });
-        setShowWithdraw(false);
-        await loadWallet();
-        Alert.alert("Éxito", "Extracción realizada");
+        try{
+            await withdrawToExternal({ payerCvu: user?.cvu!, amount: Number(amount), currency: "ARS", externalReference: "manual_withdraw" });
+            setShowWithdraw(false);
+            await loadWallet();
+            Toast.show({ type: 'success', text1: 'Extracción realizada' });
+        } catch (error) {
+            setShowWithdraw(false);
+            Toast.show({ type: 'error', text1: 'Error', text2: 'No se pudo completar la extracción' });
+        }
     };
 
     return (

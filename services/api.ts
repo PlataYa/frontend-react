@@ -5,14 +5,14 @@ import {
     LoginRequestDTO,
     LoginResponseDTO,
     UserResponseDTO
-} from '../dto/user.dto';
-import { WalletResponseDTO } from '../dto/wallet.dto';
+} from '@/dto/user.dto';
+import { WalletResponseDTO } from '@/dto/wallet.dto';
 import {
     P2PTransferDTO,
     DepositDTO,
     WithdrawalDTO,
     TransactionResponseDTO
-} from '../dto/transaction.dto';
+} from '@/dto/transaction.dto';
 
 const api = axios.create({
     baseURL: process.env.EXPO_PUBLIC_API_URL,
