@@ -1,18 +1,17 @@
 import axios from 'axios';
 import {
-    RegisterRequestDTO,
-    RegisterResponseDTO,
+    P2PTransferDTO,
+    TransactionResponseDTO,
+    WithdrawalDTO
+} from '../dto/transaction.dto';
+import {
     LoginRequestDTO,
     LoginResponseDTO,
+    RegisterRequestDTO,
+    RegisterResponseDTO,
     UserResponseDTO
 } from '../dto/user.dto';
 import { WalletResponseDTO } from '../dto/wallet.dto';
-import {
-    P2PTransferDTO,
-    DepositDTO,
-    WithdrawalDTO,
-    TransactionResponseDTO
-} from '../dto/transaction.dto';
 
 // Definimos la URL base de la API, usando la variable de entorno si está disponible
 // o una URL por defecto en caso contrario
@@ -81,22 +80,32 @@ export const validateCVU = async (cvu: number): Promise<boolean> => {
 
 // Transactions
 export const sendP2PTransaction = async (data: P2PTransferDTO): Promise<TransactionResponseDTO> => {
-    const response = await api.post('/transaction/transfer', data);
-    return response.data;
-};
-
-export const depositToWallet = async (depositData: DepositDTO): Promise<TransactionResponseDTO> => {
-    const response = await api.post('/transaction/deposit', depositData);
-    return response.data;
+    try {
+        const response = await api.post('/transaction/transfer', data);
+        return response.data;
+    } catch (error: any) {
+        if (error.response) {
+            throw new Error(error.response.data || 'Error en la transferencia');
+        }
+        throw new Error('Error de conexión');
+    }
 };
 
 export const withdrawFromWallet = async (data: WithdrawalDTO): Promise<TransactionResponseDTO> => {
-    const response = await api.post('/transaction/withdraw', data);
-    return response.data;
+    try {
+        const response = await api.post('/transaction/withdrawal', data);
+        console.log("WITHDRAWAL RESPONSE:", response.data)
+        return response.data;
+    } catch (error: any) {
+        if (error.response) {
+            throw new Error(error.response.data || 'Error en el retiro');
+        }
+        throw new Error('Error de conexión');
+    }
 };
 
 export const getTransactionById = async (transactionId: number): Promise<TransactionResponseDTO> => {
-    const response = await api.get(`/transactions/${transactionId}`);
+    const response = await api.get(`/transaction/transfer/${transactionId}`);
     return response.data;
 };
 

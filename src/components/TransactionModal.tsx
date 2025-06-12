@@ -4,7 +4,7 @@ interface Props {
     visible: boolean;
     onClose: () => void;
     onSubmit: (cvu: string, amount: string) => void;
-    type: 'transfer' | 'deposit' | 'withdraw';
+    type: 'transfer' | 'withdraw';
 }
 
 const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type }) => {
@@ -13,9 +13,13 @@ const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type })
     const [error, setError] = useState('');
 
     const title = {
-        transfer: 'Transferir a CVU',
-        deposit: 'Ingresar fondos',
-        withdraw: 'Sacar fondos',
+        transfer: 'Transferir a CVU PlataYa',
+        withdraw: 'Transferir a cuenta externa',
+    }[type];
+
+    const cvuPlaceholder = {
+        transfer: 'CVU destino PlataYa',
+        withdraw: 'CVU cuenta externa',
     }[type];
 
     const handleSubmit = () => {
@@ -26,12 +30,12 @@ const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type })
             return;
         }
 
-        if (type === 'transfer' && !cvu) {
+        if (!cvu) {
             setError("CVU requerido. Por favor, ingrese un CVU.");
             return;
         }
 
-        if (type === 'transfer' && !/^\d{12}$/.test(cvu)) {
+        if (!/^\d{12}$/.test(cvu)) {
             setError("CVU inválido. Debe tener 12 dígitos.");
             return;
         }
@@ -72,16 +76,14 @@ const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type })
                 boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
             }}>
                 <h3 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '12px' }}>{title}</h3>
-                {type === 'transfer' && (
-                    <input
-                        type="number"
-                        placeholder="CVU destino"
-                        className="input"
-                        onChange={(e) => setCvu(e.target.value)}
-                        value={cvu}
-                        style={{ marginBottom: '12px' }}
-                    />
-                )}
+                <input
+                    type="number"
+                    placeholder={cvuPlaceholder}
+                    className="input"
+                    onChange={(e) => setCvu(e.target.value)}
+                    value={cvu}
+                    style={{ marginBottom: '12px' }}
+                />
                 <input
                     type="number"
                     placeholder="Monto"

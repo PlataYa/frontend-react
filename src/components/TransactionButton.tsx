@@ -3,11 +3,10 @@ import React from 'react';
 interface Props {
     label: string;
     onPress: () => void;
-    img: 'deposit' | 'withdraw' | 'transfer';
+    img: 'withdraw' | 'transfer';
 }
 
 const icons: Record<string, string> = {
-    deposit: require('../assets/deposit.png'),
     withdraw: require('../assets/withdraw.png'),
     transfer: require('../assets/transfer.png'),
 };

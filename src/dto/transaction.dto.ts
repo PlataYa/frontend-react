@@ -5,28 +5,23 @@ export interface P2PTransferDTO {
     currency: string;
 }
 
-export interface DepositDTO {
-    payeeCvu: number;
-    amount: number;
-    currency: string;
-    externalReference: string;
-}
-
 export interface WithdrawalDTO {
-    payerCvu: number;
+    sourceCvu: number;
+    destinationCvu: number;
     amount: number;
     currency: string;
-    externalReference: string;
 }
 
 export interface TransactionResponseDTO {
-    status: string;
-    id: number;
+    transactionId: number;
+    type: string;
     payerCvu?: number;
     payeeCvu?: number;
+    sourceCvu?: number;
+    destinationCvu?: number;
     amount: number;
     currency: string;
-    timestamp: string;
-    type: string;
+    status: string;
     externalReference?: string;
+    createdAt: string;
 }
