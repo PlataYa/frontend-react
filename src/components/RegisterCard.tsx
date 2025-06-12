@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { View, Alert, Text, Pressable, StyleSheet } from 'react-native';
-import TextInputField from './TextInputField';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import PrimaryButton from './PrimaryButton';
-import { useRouter } from 'expo-router';
-import {useAuth} from "@/context/AuthContext";
+import TextInputField from './TextInputField';
 
 const RegisterCard: React.FC = () => {
     const [mail, setMail] = useState('');
@@ -13,7 +12,7 @@ const RegisterCard: React.FC = () => {
     const [dayOfBirth, setDayOfBirth] = useState('');
     const [validationError, setValidationError] = useState('');
     const { register, error } = useAuth();
-    const router = useRouter();
+    const navigate = useNavigate();
 
     const handleRegister = async () => {
         setValidationError('');
@@ -41,7 +40,7 @@ const RegisterCard: React.FC = () => {
 
         const success = await register({ mail, password, name, lastname, dayOfBirth });
         if (success) {
-            router.replace("/app/login");
+            navigate("/auth/login");
         }
     };
 
@@ -54,41 +53,33 @@ const RegisterCard: React.FC = () => {
     const isValidDateFormat = (date: string) => /^\d{4}-\d{2}-\d{2}$/.test(date);
 
     return (
-        <View>
-            <TextInputField label="Nombre" value={name} onChangeText={setName} />
-            <TextInputField label="Apellido" value={lastname} onChangeText={setLastname} />
-            <TextInputField label="Email" value={mail} onChangeText={setMail} keyboardType="email-address" />
-            <TextInputField label="Contraseña" value={password} onChangeText={setPassword} secureTextEntry />
+        <div className="card">
+            <h2 className="text-center mb-3">Registrarse</h2>
+            <TextInputField placeholder="Nombre" value={name} onChangeText={setName} />
+            <TextInputField placeholder="Apellido" value={lastname} onChangeText={setLastname} />
+            <TextInputField placeholder="Email" value={mail} onChangeText={setMail} keyboardType="email-address" />
+            <TextInputField placeholder="Contraseña" value={password} onChangeText={setPassword} secureTextEntry />
             <TextInputField
-                label="Fecha de nacimiento (YYYY-MM-DD)"
+                placeholder="Fecha de nacimiento (YYYY-MM-DD)"
                 value={dayOfBirth}
                 onChangeText={setDayOfBirth}
-                placeholder="Ej: 2000-05-10"
             />
             <PrimaryButton title="Registrarme" onPress={handleRegister} />
 
             {(validationError || error) && (
-                <Text style={styles.error}>{validationError || error}</Text>
+                <p style={{ marginTop: '8px', color: 'red', textAlign: 'center' }}>
+                    {validationError || error}
+                </p>
             )}
 
-            <Pressable onPress={() => router.push("/auth/login")}>
-                <Text style={styles.link}>¿Ya tenés cuenta? Iniciá sesión</Text>
-            </Pressable>
-        </View>
+            <button 
+                onClick={() => navigate("/auth/login")}
+                style={{ marginTop: '10px', color: '#6C63FF', textAlign: 'center', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
+            >
+                ¿Ya tenés cuenta? Iniciá sesión
+            </button>
+        </div>
     );
 };
 
 export default RegisterCard;
-
-const styles = StyleSheet.create({
-    link: {
-        marginTop: 10,
-        color: '#6C63FF',
-        textAlign: 'center',
-    },
-    error: {
-        marginTop: 8,
-        color: 'red',
-        textAlign: 'center',
-    },
-});

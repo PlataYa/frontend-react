@@ -1,8 +1,8 @@
 // AuthContext.tsx
 import React, { createContext, useContext, useEffect, useState } from "react";
-import Storage from "@/utils/Storage";
-import { LoginResponseDTO, LoginRequestDTO, RegisterRequestDTO } from "../dto/user.dto";
-import { loginUser, registerUser } from "@/services/api";
+import { LoginRequestDTO, LoginResponseDTO, RegisterRequestDTO } from "../dto/user.dto";
+import { loginUser, registerUser } from "../services/api";
+import Storage from "../utils/Storage";
 
 interface AuthContextType {
     user: LoginResponseDTO | null;
@@ -71,7 +71,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsLoading(true);
         setError(null);
         try {
-            await Storage.deleteItem("user");
+            await Storage.removeItem("user");
             setUser(null);
         } catch (err: any) {
             setError(err.message);
