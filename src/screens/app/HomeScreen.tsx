@@ -14,6 +14,7 @@ export default function HomeScreen() {
     const [showTransfer, setShowTransfer] = useState(false);
     const [showWithdraw, setShowWithdraw] = useState(false);
     const [transactionUpdated, setTransactionUpdated] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const loadWallet = async () => {
         if (!user?.mail) return;
@@ -32,44 +33,66 @@ export default function HomeScreen() {
     const refreshTransactions = () => setTransactionUpdated(prev => !prev);
 
     const handleTransfer = async (cvu: string, amount: string) => {
+
+        const parsedAmount = Number(amount);
+        const parsedCvu = Number(cvu);
+
+        if (parsedAmount > wallet?.balance) {
+            setError('Saldo insuficiente. Saldo disponible: ' + wallet?.balance);
+            return;
+        }
+
         try {
-            const valid = await validateCVU(Number(cvu));
+            const valid = await validateCVU(parsedCvu);
             if (!valid) {
-                toast.error('CVU inválido: No se encontró una cuenta con ese CVU');
+                setError('CVU inválido: No se encontró una cuenta con ese CVU');
                 return;
             }
 
             await sendP2PTransaction({
                 payerCvu: user.cvu,
-                payeeCvu: Number(cvu),
-                amount: Number(amount),
+                payeeCvu: parsedCvu,
+                amount: parsedAmount,
                 currency: "ARS",
             });
-            setShowTransfer(false);
+
             await loadWallet();
             refreshTransactions();
-            toast.success('Transferencia realizada');
-        } catch (error: any) {
             setShowTransfer(false);
-            toast.error(error.message);
+            toast.success('Transferencia realizada exitosamente');
+        } catch (error: any) {
+            setError(error.message);
         }
     };
 
     const handleWithdraw = async (destinationCvu: string, amount: string) => {
+
+        const parsedAmount = Number(amount);
+        const parsedCvu = Number(destinationCvu);
+
+        if (parsedAmount > wallet?.balance) {
+            setError('Saldo insuficiente. Saldo disponible: ' + wallet?.balance);
+            return;
+        }
+
         try {
-            await withdrawFromWallet({ 
-                sourceCvu: user.cvu, 
-                destinationCvu: Number(destinationCvu), 
-                amount: Number(amount), 
-                currency: "ARS" 
+             await withdrawFromWallet({
+                sourceCvu: user.cvu,
+                destinationCvu: parsedCvu,
+                amount: parsedAmount,
+                currency: "ARS"
             });
-            setShowWithdraw(false);
+
             await loadWallet();
             refreshTransactions();
+            setShowWithdraw(false);
             toast.success('Retiro realizado exitosamente');
         } catch (error: any) {
-            setShowWithdraw(false);
-            toast.error(error.message);
+            if (error.message.includes('not found')) {
+                setError('CVU inválido: No se encontró una cuenta con ese CVU');
+            } else {
+                setError(error.message);
+            }
         }
     };
 
@@ -90,12 +113,12 @@ export default function HomeScreen() {
             )}
 
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%', margin: '20px 0' }}>
-                <TransactionButton img="transfer" label="Transferir a PlataYa" onPress={() => setShowTransfer(true)} />
-                <TransactionButton img="withdraw" label="Transferir a cuenta externa" onPress={() => setShowWithdraw(true)} />
+                <TransactionButton id="transfer-button" img="transfer" label="Transferir a PlataYa" onPress={() => setShowTransfer(true)} />
+                <TransactionButton id="withdraw-button" img="withdraw" label="Transferir a cuenta externa" onPress={() => setShowWithdraw(true)} />
             </div>
 
-            <TransactionModal visible={showTransfer} onClose={() => setShowTransfer(false)} onSubmit={handleTransfer} type="transfer" />
-            <TransactionModal visible={showWithdraw} onClose={() => setShowWithdraw(false)} onSubmit={handleWithdraw} type="withdraw" />
+            <TransactionModal error={error} setError={setError} visible={showTransfer} onClose={() => setShowTransfer(false)} onSubmit={handleTransfer} type="transfer" />
+            <TransactionModal error={error} setError={setError} visible={showWithdraw} onClose={() => setShowWithdraw(false)} onSubmit={handleWithdraw} type="withdraw" />
 
             <TransactionsList key={transactionUpdated.toString()} />
 

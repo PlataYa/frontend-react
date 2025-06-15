@@ -5,12 +5,13 @@ interface Props {
     onClose: () => void;
     onSubmit: (cvu: string, amount: string) => void;
     type: 'transfer' | 'withdraw';
+    error?: string;
+    setError?: (error: string) => void;
 }
 
-const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type }) => {
+const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type, error, setError }) => {
     const [cvu, setCvu] = useState('');
     const [amount, setAmount] = useState('');
-    const [error, setError] = useState('');
 
     const title = {
         transfer: 'Transferir a CVU PlataYa',
@@ -25,6 +26,11 @@ const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type })
     const handleSubmit = () => {
         setError('');
 
+        if (!cvu && !amount) {
+            setError("Todos los campos son obligatorios.");
+            return;
+        }
+
         if (!amount) {
             setError("Monto requerido. Por favor, ingrese un monto.");
             return;
@@ -35,21 +41,20 @@ const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type })
             return;
         }
 
-        if (!/^\d{12}$/.test(cvu)) {
+        if (type=="transfer" && !/^\d{12}$/.test(cvu)) {
             setError("CVU inválido. Debe tener 12 dígitos.");
             return;
         }
 
         const monto = Number(amount);
-        if (!/^\d+(\.\d{1,2})?$/.test(amount) || monto <= 0 || monto > 1000000) {
-            setError("Monto inválido. Debe ser un número positivo y menor a 1,000,000.");
+        if (!/^\d+(\.\d{1,2})?$/.test(amount) || monto <= 0) {
+            setError("Monto inválido. Debe ser un número positivo.");
             return;
         }
 
         onSubmit(cvu, amount);
         setCvu('');
         setAmount('');
-        onClose();
     };
 
     if (!visible) return null;
@@ -77,6 +82,7 @@ const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type })
             }}>
                 <h3 style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: '12px' }}>{title}</h3>
                 <input
+                    id="cvu-input"
                     type="number"
                     placeholder={cvuPlaceholder}
                     className="input"
@@ -85,6 +91,7 @@ const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type })
                     style={{ marginBottom: '12px' }}
                 />
                 <input
+                    id="amount-input"
                     type="number"
                     placeholder="Monto"
                     className="input"
@@ -97,7 +104,7 @@ const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type })
                     <button className="button" onClick={onClose} style={{ backgroundColor: '#ccc', color: '#000' }}>
                         Cancelar
                     </button>
-                    <button className="button" onClick={handleSubmit}>
+                    <button id="submit-button" className="button" onClick={handleSubmit}>
                         Confirmar
                     </button>
                 </div>

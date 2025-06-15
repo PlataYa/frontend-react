@@ -4,6 +4,7 @@ interface Props {
     label: string;
     onPress: () => void;
     img: 'withdraw' | 'transfer';
+    id: string;
 }
 
 const icons: Record<string, string> = {
@@ -11,8 +12,8 @@ const icons: Record<string, string> = {
     transfer: require('../assets/transfer.png'),
 };
 
-const TransactionButton: React.FC<Props> = ({ label, onPress, img }) => (
-    <div style={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
+const TransactionButton: React.FC<Props> = ({ id, label, onPress, img }) => (
+    <div id={id} style={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
         <button
             data-testid={`${img}-button`}
             onClick={onPress}

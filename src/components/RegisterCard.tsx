@@ -68,6 +68,8 @@ const RegisterCard: React.FC = () => {
         const success = await register({ mail, password, name, lastname, dayOfBirth });
         if (success) {
             navigate("/auth/login");
+        } else {
+            setValidationError(error || 'Error al registrarse. Intente nuevamente.');
         }
     };
 

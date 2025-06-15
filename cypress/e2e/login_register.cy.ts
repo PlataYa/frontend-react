@@ -84,7 +84,7 @@ describe('Flujo de Login y Registro', () => {
     context('Login', () => {
         beforeEach(() => {
             cy.visit('http://localhost:3000/auth/login');
-            cy.wait(300);
+            cy.wait(500);
         });
 
         it('debe mostrar error si el email es inválido', () => {
@@ -92,7 +92,7 @@ describe('Flujo de Login y Registro', () => {
             cy.get('#login-password').type('abc', { delay: 100 });
             cy.get('#login-button').click();
             cy.contains('Email inválido').should('exist');
-            cy.wait(1500);
+            cy.wait(2000);
         });
 
         it('debe mostrar error si la contraseña es corta', () => {
@@ -100,33 +100,33 @@ describe('Flujo de Login y Registro', () => {
             cy.get('#login-password').type('abc');
             cy.get('#login-button').click();
             cy.contains('La contraseña debe tener al menos 8 caracteres').should('exist');
-            cy.wait(1500);
+            cy.wait(2000);
         });
 
         it('debe mostrar error si se deja el email vacío', () => {
             cy.get('#login-password').type('Password123');
             cy.get('#login-button').click();
-            cy.contains('Email inválido').should('exist');
-            cy.wait(1500);
+            cy.contains('Todos los campos son obligatorios').should('exist');
+            cy.wait(2000);
         });
 
         it('debe mostrar error si se deja la contraseña vacía', () => {
             cy.get('#login-email').type('test@example.com');
             cy.get('#login-button').click();
-            cy.contains('La contraseña debe tener al menos 8 caracteres').should('exist');
-            cy.wait(1500);
+            cy.contains('Todos los campos son obligatorios').should('exist');
+            cy.wait(2000);
         });
 
         it('debe bloquear el botón después de 5 intentos fallidos', () => {
-            for (let i = 0; i < 5; i++) {
+            for (let i = 1; i < 5; i++) {
                 cy.get('#login-email').clear().type('incorrect@example.com');
                 cy.get('#login-password').clear().type('WrongPass1!');
                 cy.get('#login-button').click();
-                cy.wait(200);
+                cy.wait(1000);
             }
             cy.contains('Demasiados intentos').should('exist');
             cy.get('#login-button').should('be.disabled');
-            cy.wait(1500);
+            cy.wait(2000);
         });
     });
 });
