@@ -7,9 +7,10 @@ export interface P2PTransferDTO {
 
 export interface WithdrawalDTO {
     sourceCvu: number;
-    destinationCvu: number;
+    destinationCvu?: number;
     amount: number;
     currency: string;
+    externalReference?: string;
 }
 
 export interface TransactionResponseDTO {
