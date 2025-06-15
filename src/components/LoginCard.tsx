@@ -10,7 +10,7 @@ const LoginCard: React.FC = () => {
     const [mail, setMail] = useState('');
     const [password, setPassword] = useState('');
     const [validationError, setValidationError] = useState('');
-    const [attempts, setAttempts] = useState(0);
+    const [attempts, setAttempts] = useState(1);
     const { login, error } = useAuth();
     const navigate = useNavigate();
 
@@ -20,17 +20,12 @@ const LoginCard: React.FC = () => {
     const handleLogin = async () => {
         setValidationError('');
 
-        if (attempts >= MAX_ATTEMPTS) {
-            setValidationError('Demasiados intentos. Por favor, espere o reinicie la app.');
-            return;
-        }
-
-        if (!mail && !password) {
+        if (!mail || !password) {
             setValidationError('Todos los campos son obligatorios.');
             return;
         }
 
-        if (!mail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)) {
             setValidationError('Email inválido');
             return;
         }
@@ -40,12 +35,18 @@ const LoginCard: React.FC = () => {
             return;
         }
 
+        if (attempts >= MAX_ATTEMPTS) {
+            setValidationError('Demasiados intentos. Por favor, espere o reinicie la app.');
+            return;
+        }
+
         const success = await login({ mail, password });
         if (success) {
             navigate("/");
         } else {
-            setAttempts(prev => prev + 1);
-            if (attempts + 1 >= MAX_ATTEMPTS) {
+            const nextAttempts = attempts + 1;
+            setAttempts(nextAttempts);
+            if (nextAttempts >= MAX_ATTEMPTS) {
                 setValidationError('Demasiados intentos. Por favor, espere o reinicie la app.');
             } else {
                 setValidationError('Email o contraseña incorrectos');
@@ -58,12 +59,29 @@ const LoginCard: React.FC = () => {
             <h2 id="main-title" className="text-center mb-3">Iniciar Sesión</h2>
             <TextInputField id="login-email" placeholder="Email" value={mail} onChangeText={setMail} keyboardType="email-address" />
             <TextInputField id="login-password" placeholder="Contraseña" value={password} onChangeText={setPassword} secureTextEntry />
-            {(validationError || error) && <p style={{ color: 'red', textAlign: 'center', marginTop: '10px' }}>{validationError || error}</p>}
-            <PrimaryButton id="login-button" title="Iniciar Sesión" onPress={handleLogin} disabled={attempts >= MAX_ATTEMPTS} />
+            {(validationError || error) && (
+                <p style={{ color: 'red', textAlign: 'center', marginTop: '10px' }}>
+                    {validationError || error}
+                </p>
+            )}
+            <PrimaryButton
+                id="login-button"
+                title="Iniciar Sesión"
+                onPress={handleLogin}
+                disabled={attempts >= MAX_ATTEMPTS}
+            />
             <button
                 id="redirect-register-button"
                 onClick={() => navigate("/auth/register")}
-                style={{ marginTop: '10px', color: '#6C63FF', textAlign: 'center', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
+                style={{
+                    marginTop: '10px',
+                    color: '#6C63FF',
+                    textAlign: 'center',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    textDecoration: 'underline'
+                }}
                 accessKey="register"
             >
                 No tenés cuenta? Registrate

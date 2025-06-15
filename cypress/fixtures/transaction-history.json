@@ -1,0 +1,33 @@
+[
+  {
+    "transactionId": 1,
+    "type": "DEPOSIT",
+    "payerCvu": 98765432109,
+    "payeeCvu": 12345678901,
+    "amount": 200.0,
+    "currency": "ARS",
+    "status": "COMPLETED",
+    "createdAt": "2024-01-15T09:00:00"
+  },
+  {
+    "transactionId": 2,
+    "type": "P2P",
+    "payerCvu": 12345678901,
+    "payeeCvu": 11111111111,
+    "amount": 50.0,
+    "currency": "ARS",
+    "status": "COMPLETED",
+    "createdAt": "2024-01-15T10:00:00"
+  },
+  {
+    "transactionId": 3,
+    "type": "WITHDRAWAL",
+    "sourceCvu": 12345678901,
+    "destinationCvu": 22222222222,
+    "amount": 25.0,
+    "currency": "ARS",
+    "status": "COMPLETED",
+    "externalReference": "Banco Santander",
+    "createdAt": "2024-01-15T11:00:00"
+  }
+] 
