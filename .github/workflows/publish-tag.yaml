@@ -135,3 +135,4 @@ jobs:
             ghcr.io/plataya/frontend:v${{ needs.create_release.outputs.version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
