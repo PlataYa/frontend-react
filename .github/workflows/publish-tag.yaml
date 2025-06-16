@@ -132,6 +132,6 @@ jobs:
             REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }}
           tags: |
             ghcr.io/plataya/frontend:latest
-            ghcr.io/plataya/frontend:v${{ needs.create_release.outputs.version }}
+            ghcr.io/plataya/frontend:${{ needs.create_release.outputs.version }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
