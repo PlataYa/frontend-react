@@ -1,7 +1,11 @@
 package com.plataya.app;
 
+import android.media.MediaCodecInfo;
+import android.os.Build;
 import android.os.Bundle;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
+import android.webkit.WebView;
 
 import com.getcapacitor.BridgeActivity;
 
