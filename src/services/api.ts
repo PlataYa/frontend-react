@@ -104,6 +104,18 @@ export const withdrawFromWallet = async (data: WithdrawalDTO): Promise<Transacti
     }
 };
 
+export const depositToWallet = async (data: WithdrawalDTO): Promise<TransactionResponseDTO> => {
+    try {
+        const response = await api.post('/transaction/deposit', data);
+        return response.data;
+    } catch (error: any) {
+        if (error.response) {
+            throw new Error(error.response.data || 'Error en el depósito');
+        }
+        throw new Error('Error de conexión');
+    }
+}
+
 export const getTransactionById = async (transactionId: number): Promise<TransactionResponseDTO> => {
     const response = await api.get(`/transaction/transfer/${transactionId}`);
     return response.data;

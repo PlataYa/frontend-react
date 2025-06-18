@@ -3,13 +3,14 @@ import React from 'react';
 interface Props {
     label: string;
     onPress: () => void;
-    img: 'withdraw' | 'transfer';
+    img: 'withdraw' | 'transfer' | 'deposit';
     id: string;
 }
 
 const icons: Record<string, string> = {
     withdraw: require('../assets/withdraw.png'),
     transfer: require('../assets/transfer.png'),
+    deposit: require('../assets/deposit.png'),
 };
 
 const TransactionButton: React.FC<Props> = ({ id, label, onPress, img }) => (

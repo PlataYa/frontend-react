@@ -59,7 +59,7 @@ describe('Errores en transacciones', () => {
         it('Saldo insuficiente para extracción', () => {
             cy.get('#withdraw-button').click();
             cy.get('#cvu-input').type('200000000005');
-            cy.get('#amount-input').type('1000000');
+            cy.get('#amount-input').type('1000000000');
             cy.get('#submit-button').click();
             cy.contains('Saldo insuficiente').should('exist');
             cy.wait(2000);
@@ -120,7 +120,7 @@ describe('Errores en transacciones', () => {
         it('Saldo insuficiente para transferencia', () => {
             cy.get('#transfer-button').click();
             cy.get('#cvu-input').type('100000000002');
-            cy.get('#amount-input').type('1000000');
+            cy.get('#amount-input').type('1000000000');
             cy.get('#submit-button').click();
             cy.contains('Saldo insuficiente').should('exist');
             cy.wait(2000);
