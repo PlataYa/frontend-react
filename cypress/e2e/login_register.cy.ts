@@ -126,7 +126,7 @@ describe('Flujo de Login y Registro', () => {
             }
             cy.contains('Demasiados intentos').should('exist');
             cy.get('#login-button').should('be.disabled');
-            cy.wait(2000);
+            cy.wait(1000);
         });
     });
 });

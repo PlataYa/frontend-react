@@ -4,7 +4,7 @@ interface Props {
     visible: boolean;
     onClose: () => void;
     onSubmit: (cvu: string, amount: string) => void;
-    type: 'transfer' | 'withdraw';
+    type: 'transfer' | 'withdraw' | 'deposit';
     error?: string;
     setError?: (error: string) => void;
 }
@@ -16,11 +16,13 @@ const TransactionModal: React.FC<Props> = ({ visible, onClose, onSubmit, type, e
     const title = {
         transfer: 'Transferir a CVU PlataYa',
         withdraw: 'Transferir a cuenta externa',
+        deposit: 'Ingresar dinero a PlataYa',
     }[type];
 
     const cvuPlaceholder = {
         transfer: 'CVU destino PlataYa',
         withdraw: 'CVU cuenta externa',
+        deposit: 'CVU cuenta externa',
     }[type];
 
     const handleSubmit = () => {

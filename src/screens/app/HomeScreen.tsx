@@ -6,13 +6,20 @@ import TransactionModal from '../../components/TransactionModal';
 import WalletInfo from '../../components/WalletInfo';
 import { useAuth } from '../../context/AuthContext';
 import { WalletResponseDTO } from '../../dto/wallet.dto';
-import { getWalletByMail, sendP2PTransaction, validateCVU, withdrawFromWallet } from '../../services/api';
+import {
+    depositToWallet,
+    getWalletByMail,
+    sendP2PTransaction,
+    validateCVU,
+    withdrawFromWallet
+} from '../../services/api';
 
 export default function HomeScreen() {
     const { user, logout } = useAuth();
     const [wallet, setWallet] = useState<WalletResponseDTO | null>(null);
     const [showTransfer, setShowTransfer] = useState(false);
     const [showWithdraw, setShowWithdraw] = useState(false);
+    const [showDeposit, setShowDeposit] = useState(false);
     const [transactionUpdated, setTransactionUpdated] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -96,6 +103,32 @@ export default function HomeScreen() {
         }
     };
 
+    const handleDeposit = async (fromCvu: string, amount: string) => {
+        const parsedAmount = Number(amount);
+        const parsedCvu = Number(fromCvu);
+
+        if (parsedAmount <= 0) {
+            setError('El monto debe ser mayor a 0');
+            return;
+        }
+
+        try {
+            await depositToWallet({
+                sourceCvu: parsedCvu,
+                destinationCvu: user.cvu,
+                amount: parsedAmount,
+                currency: "ARS",
+            });
+
+            await loadWallet();
+            refreshTransactions();
+            setShowDeposit(false);
+            toast.success('Depósito realizado exitosamente');
+        } catch (error: any) {
+            setError(error.message);
+        }
+    }
+
     return (
         <div className="container" style={{ padding: '20px', textAlign: 'center' }}>
             <img
@@ -115,10 +148,12 @@ export default function HomeScreen() {
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%', margin: '20px 0' }}>
                 <TransactionButton id="transfer-button" img="transfer" label="Transferir a PlataYa" onPress={() => setShowTransfer(true)} />
                 <TransactionButton id="withdraw-button" img="withdraw" label="Transferir a cuenta externa" onPress={() => setShowWithdraw(true)} />
+                <TransactionButton id="deposit-button" img="deposit" label="Ingresar dinero" onPress={() => setShowDeposit(true)} />
             </div>
 
             <TransactionModal error={error} setError={setError} visible={showTransfer} onClose={() => setShowTransfer(false)} onSubmit={handleTransfer} type="transfer" />
             <TransactionModal error={error} setError={setError} visible={showWithdraw} onClose={() => setShowWithdraw(false)} onSubmit={handleWithdraw} type="withdraw" />
+            <TransactionModal error={error} setError={setError} visible={showDeposit} onClose={() => setShowDeposit(false)} onSubmit={handleDeposit} type="deposit" />
 
             <TransactionsList key={transactionUpdated.toString()} />
 
