@@ -3,9 +3,9 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { withdrawFromWallet } from '../../services/api';
 import { toast } from 'react-toastify';
-import TextInputField from '../../components/TextInputField';
 
 const WithdrawScreen: React.FC = () => {
+    const [cvu, setCvu] = useState('');
     const [amount, setAmount] = useState('');
     const [error, setError] = useState('');
     const { user } = useAuth();
@@ -16,10 +16,20 @@ const WithdrawScreen: React.FC = () => {
     };
 
     const handleSubmit = async () => {
-        setError('');
+        if (!error) setError('');
+
+        if (!cvu && !amount) {
+            setError("Todos los campos son obligatorios.");
+            return;
+        }
 
         if (!amount) {
             setError("Monto requerido. Por favor, ingrese un monto.");
+            return;
+        }
+
+        if (!cvu) {
+            setError("CVU requerido. Por favor, ingrese un CVU.");
             return;
         }
 
@@ -30,16 +40,23 @@ const WithdrawScreen: React.FC = () => {
         }
 
         try {
+            const parsedAmount = Number(amount);
+            const parsedCvu = Number(cvu);
+
             await withdrawFromWallet({
                 sourceCvu: user.cvu,
-                amount: Number(amount),
-                currency: "ARS",
-                externalReference: "manual_withdraw"
+                destinationCvu: parsedCvu,
+                amount: parsedAmount,
+                currency: "ARS"
             });
-            toast.success('Extracción realizada');
+            toast.success('Retiro realizado exitosamente');
             navigate('/');
-        } catch (error) {
-            toast.error('No se pudo completar la extracción');
+        } catch (error: any) {
+            if (error.message.includes('not found')) {
+                setError('CVU inválido: No se encontró una cuenta con ese CVU');
+            } else {
+                setError(error.message);
+            }
         }
     };
 
@@ -50,56 +67,56 @@ const WithdrawScreen: React.FC = () => {
                 src={require("../../assets/logo.png")}
                 alt="Logo"
             />
-            <div className="card" style={{
-                margin: '24px auto',
-                backgroundColor: '#fff',
-                borderRadius: '12px',
-                padding: '20px',
-                maxWidth: '500px',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-            }}>
-                <h3 style={{ fontWeight: 'bold', fontSize: '24px', marginBottom: '20px' }}>Transferir a cuenta externa</h3>
-                <div style={{ marginBottom: '16px' }}>
-                    <TextInputField
-                        placeholder="Monto"
-                        value={amount}
-                        onChangeText={setAmount}
-                        keyboardType="numeric"
-                    />
-                </div>
-                {error && <p style={{ color: 'red', marginBottom: '16px' }}>{error}</p>}
-                <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px' }}>
-                    <button
-                        className="button"
-                        onClick={handleCancel}
-                        style={{
-                            backgroundColor: '#ccc',
-                            color: '#000',
-                            padding: '12px 24px',
-                            borderRadius: '8px',
-                            border: 'none',
-                            cursor: 'pointer',
-                            width: '48%'
-                        }}
-                    >
-                        Cancelar
-                    </button>
-                    <button
-                        className="button"
-                        onClick={handleSubmit}
-                        style={{
-                            backgroundColor: '#6C63FF',
-                            color: '#fff',
-                            padding: '12px 24px',
-                            borderRadius: '8px',
-                            border: 'none',
-                            cursor: 'pointer',
-                            width: '48%'
-                        }}
-                    >
-                        Confirmar
-                    </button>
-                </div>
+            <h3 style={{ fontWeight: 'bold', fontSize: '24px', marginBottom: '20px' }}>Transferir a cuenta externa</h3>
+            <input
+                id="cvu-input"
+                placeholder="CVU cuenta externa"
+                className="input"
+                onChange={(e) => setCvu(e.target.value)}
+                value={cvu}
+                style={{ marginBottom: '12px', width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc' }}
+            />
+            <input
+                id="amount-input"
+                placeholder="Monto"
+                className="input"
+                onChange={(e) => setAmount(e.target.value)}
+                value={amount}
+                style={{ marginBottom: '12px', width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc' }}
+            />
+            {error && <p style={{ color: 'red', marginBottom: '12px' }}>{error}</p>}
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px' }}>
+                <button
+                    className="button"
+                    onClick={handleCancel}
+                    style={{
+                        backgroundColor: '#ccc',
+                        color: '#000',
+                        padding: '12px 24px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        cursor: 'pointer',
+                        width: '48%'
+                    }}
+                >
+                    Cancelar
+                </button>
+                <button
+                    id="submit-button"
+                    className="button"
+                    onClick={handleSubmit}
+                    style={{
+                        backgroundColor: '#6C63FF',
+                        color: '#fff',
+                        padding: '12px 24px',
+                        borderRadius: '8px',
+                        border: 'none',
+                        cursor: 'pointer',
+                        width: '48%'
+                    }}
+                >
+                    Confirmar
+                </button>
             </div>
         </div>
     );

@@ -3,7 +3,6 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { sendP2PTransaction, validateCVU } from '../../services/api';
 import { toast } from 'react-toastify';
-import TextInputField from '../../components/TextInputField';
 
 const TransferScreen: React.FC = () => {
     const [cvu, setCvu] = useState('');
@@ -17,7 +16,12 @@ const TransferScreen: React.FC = () => {
     };
 
     const handleSubmit = async () => {
-        setError('');
+        if (!error) setError('');
+
+        if (!cvu && !amount) {
+            setError("Todos los campos son obligatorios.");
+            return;
+        }
 
         if (!amount) {
             setError("Monto requerido. Por favor, ingrese un monto.");
@@ -41,22 +45,25 @@ const TransferScreen: React.FC = () => {
         }
 
         try {
-            const valid = await validateCVU(Number(cvu));
+            const parsedAmount = Number(amount);
+            const parsedCvu = Number(cvu);
+
+            const valid = await validateCVU(parsedCvu);
             if (!valid) {
-                toast.error('CVU inválido: No se encontró una cuenta con ese CVU');
+                setError('CVU inválido: No se encontró una cuenta con ese CVU');
                 return;
             }
 
             await sendP2PTransaction({
                 payerCvu: user.cvu,
-                payeeCvu: Number(cvu),
-                amount: Number(amount),
+                payeeCvu: parsedCvu,
+                amount: parsedAmount,
                 currency: "ARS",
             });
-            toast.success('Transferencia realizada');
+            toast.success('Transferencia realizada exitosamente');
             navigate('/');
-        } catch (error) {
-            toast.error('No se pudo completar la transferencia');
+        } catch (error: any) {
+            setError(error.message);
         }
     };
 
@@ -68,17 +75,23 @@ const TransferScreen: React.FC = () => {
                 alt="Logo"
             />
             <h3 style={{ fontWeight: 'bold', fontSize: '24px', marginBottom: '20px' }}>Transferir a PlataYa</h3>
-            <TextInputField
-              placeholder="CVU destino"
-              value={cvu}
-              onChangeText={setCvu}
+            <input
+                id="cvu-input"
+                placeholder="CVU destino PlataYa"
+                className="input"
+                onChange={(e) => setCvu(e.target.value)}
+                value={cvu}
+                style={{ marginBottom: '12px', width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc' }}
             />
-            <TextInputField
-              placeholder="Monto"
-              value={amount}
-              onChangeText={setAmount}
+            <input
+                id="amount-input"
+                placeholder="Monto"
+                className="input"
+                onChange={(e) => setAmount(e.target.value)}
+                value={amount}
+                style={{ marginBottom: '12px', width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ccc' }}
             />
-            {error && <p style={{ color: 'red', marginBottom: '16px' }}>{error}</p>}
+            {error && <p style={{ color: 'red', marginBottom: '12px' }}>{error}</p>}
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: '10px' }}>
                 <button
                     className="button"
@@ -96,6 +109,7 @@ const TransferScreen: React.FC = () => {
                     Cancelar
                 </button>
                 <button
+                    id="submit-button"
                     className="button"
                     onClick={handleSubmit}
                     style={{
@@ -112,7 +126,6 @@ const TransferScreen: React.FC = () => {
                 </button>
             </div>
         </div>
-
     );
 };
 
